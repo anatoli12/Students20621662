@@ -1,5 +1,6 @@
 package bg.tuvarna.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -13,7 +14,7 @@ public class Student {
     private Program program;
     private Integer group;
     private Status status;
+    @JsonIgnore
     private BigDecimal gpa;
     private List<Course> courseList;
-
 }

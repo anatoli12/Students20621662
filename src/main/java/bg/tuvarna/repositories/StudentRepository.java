@@ -1,6 +1,5 @@
 package bg.tuvarna.repositories;
 
-import bg.tuvarna.models.Course;
 import bg.tuvarna.models.Student;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,7 +29,7 @@ public class StudentRepository {
   public List<Student> findByProgramAndCurrentYear(String programName, int year) {
     List<Student> foundStudents = new ArrayList<>();
     for (Student student : studentList) {
-      if (student.getProgram().getName().equals(programName) && student.getCurrentYear() == year) {
+      if (student.getProgram().name().equals(programName) && student.getCurrentYear() == year) {
         foundStudents.add(student);
       }
     }

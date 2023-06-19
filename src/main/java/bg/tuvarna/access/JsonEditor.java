@@ -19,8 +19,8 @@ public class JsonEditor {
   private ObjectNode currentData;
   private boolean isFileOpen;
 
-  private final ObjectMapper objectMapper;
-  private final StudentRepository studentRepository;
+  private ObjectMapper objectMapper;
+  private StudentRepository studentRepository;
 
   public JsonEditor() {
     objectMapper = new ObjectMapper();
@@ -79,6 +79,9 @@ public class JsonEditor {
     currentFilePath = null;
     currentData = null;
     isFileOpen = false;
+    objectMapper = new ObjectMapper();
+    studentRepository = new StudentRepository();
+    System.out.println("File closed successfully");
   }
 
   public void save() {
@@ -161,14 +164,14 @@ public class JsonEditor {
       String[] parts = command.split(" ", 2);
       if (parts.length > 0 && !parts[0].isEmpty()) {
         String cmd = parts[0];
-        String args = parts.length > 1 ? parts[1] : "";
+        String[] cmdArgs = parts.length > 1 ? parts[1].split(" ") : new String[0];
 
         switch (cmd) {
           case "open":
-            if (args.isEmpty()) {
+            if (cmdArgs.length<1) {
               System.out.println("File path is required.");
             } else {
-              openFile(args);
+              openFile(cmdArgs[0]);
             }
             break;
           case "close":
@@ -178,10 +181,10 @@ public class JsonEditor {
             save();
             break;
           case "saveas":
-            if (args.isEmpty()) {
+            if (cmdArgs.length<1) {
               System.out.println("New file path is required.");
             } else {
-              saveAs(args);
+              saveAs(cmdArgs[0]);
             }
             break;
           case "help":
@@ -192,15 +195,14 @@ public class JsonEditor {
             break;
           case "enroll":
             if (isFileOpen) {
-              String[] enrollArgs = args.split("\\s+");
-              if (enrollArgs.length < 4) {
+              if (cmdArgs.length < 4) {
                 System.out.println(
                     "Insufficient parameters. Usage: enroll <name> <program> <group> <facultyNumber>");
               } else {
-                String name = enrollArgs[0];
-                Program program = Program.valueOf(enrollArgs[1].toUpperCase());
-                int group = Integer.parseInt(enrollArgs[2]);
-                String facultyNumber = enrollArgs[3];
+                String name = cmdArgs[0];
+                Program program = Program.valueOf(cmdArgs[1].toUpperCase());
+                int group = Integer.parseInt(cmdArgs[2]);
+                String facultyNumber = cmdArgs[3];
                 studentService.enrollStudent(name, program, group, facultyNumber);
                 System.out.println("Student enrolled successfully.");
               }
@@ -222,18 +224,17 @@ public class JsonEditor {
             break;
           case "change":
             if (isFileOpen) {
-              if (args.isEmpty()) {
+              if (cmdArgs.length<1) {
                 System.out.println(
                         "Insufficient parameters. Usage: change <facultyNumber> <option> <value>");
               } else {
-                String[] commandArgs = args.split(" ", 3);
-                if (commandArgs.length < 3) {
+                if (cmdArgs.length < 3) {
                   System.out.println(
                           "Insufficient parameters. Usage: change <facultyNumber> <option> <value>");
                 } else {
-                  String facultyNumber = commandArgs[0];
-                  String option = commandArgs[1];
-                  String value = commandArgs[2];
+                  String facultyNumber = cmdArgs[0];
+                  String option = cmdArgs[1];
+                  String value = cmdArgs[2];
                   studentService.change(facultyNumber, option, value);
                 }
               }
@@ -291,11 +292,11 @@ public class JsonEditor {
             break;
           case "printall":
             if (isFileOpen) {
-              if (parts.length < 3) {
+              if (parts.length < 2) {
                 System.out.println("Insufficient parameters. Usage: printall <program> <year>");
               } else {
-                String programName = parts[1];
-                int year = Integer.parseInt(parts[2]);
+                String programName = cmdArgs[0];
+                int year = Integer.parseInt(cmdArgs[1]);
                 studentService.printAll(programName, year);
               }
             } else {
@@ -304,12 +305,12 @@ public class JsonEditor {
             break;
           case "enrollin":
             if (isFileOpen) {
-              if (parts.length < 3) {
+              if (parts.length < 2) {
                 System.out.println(
                     "Insufficient parameters. Usage: enrollin <facultyNumber> <disciplineName>");
               } else {
-                String facultyNumber = parts[1];
-                String disciplineName = parts[2];
+                String facultyNumber = cmdArgs[0];
+                String disciplineName = cmdArgs[1];
                 studentService.enrollIn(facultyNumber, disciplineName);
               }
             } else {
@@ -318,13 +319,13 @@ public class JsonEditor {
             break;
           case "addgrade":
             if (isFileOpen) {
-              if (parts.length < 4) {
+              if (cmdArgs.length < 3) {
                 System.out.println(
                     "Insufficient parameters. Usage: addgrade <facultyNumber> <disciplineName> <grade>");
               } else {
-                String facultyNumber = parts[1];
-                String disciplineName = parts[2];
-                double grade = Double.parseDouble(parts[3]);
+                String facultyNumber = cmdArgs[0];
+                String disciplineName = cmdArgs[1];
+                double grade = Double.parseDouble(cmdArgs[2]);
                 studentService.addGrade(facultyNumber, disciplineName, grade);
               }
             } else {
