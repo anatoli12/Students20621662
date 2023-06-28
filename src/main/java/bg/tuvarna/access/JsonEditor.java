@@ -13,13 +13,22 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Scanner;
 
+/**
+ * JsonEditor класът отговаря за работата с файлове, по-конкретно json, включващи информация за студенти.
+ * Поддържа операции като отваряне, затваряне, запазване на файлове. Използва CLI за обработката на данните за студентите.
+ */
 public class JsonEditor {
 
   private Path currentFilePath;
   private ObjectNode currentData;
   private boolean isFileOpen;
-
+  /**
+   * Обектът от тип ObjectMapper отговаря за трансформацията между Java обект и JSON.
+   */
   private ObjectMapper objectMapper;
+  /**
+   * Данните за студентите
+   */
   private StudentRepository studentRepository;
 
   public JsonEditor() {
@@ -27,7 +36,10 @@ public class JsonEditor {
     isFileOpen = false;
     studentRepository = new StudentRepository();
   }
-
+  /**
+   * Отваря файл по зададен път, чете JSON данните и ги запазва в Student хранилището.
+   * @param filePathString пътят към файла за отваряне.
+   */
   public void openFile(String filePathString) {
     Path filePath = Path.of(filePathString);
     File file = filePath.toFile();
@@ -69,7 +81,9 @@ public class JsonEditor {
       e.printStackTrace();
     }
   }
-
+  /**
+   * Затваря текущо отворения файл, ако има такъв.
+   */
   public void closeFile() {
     if (!isFileOpen) {
       System.out.println("No file is currently open.");
@@ -83,7 +97,9 @@ public class JsonEditor {
     studentRepository = new StudentRepository();
     System.out.println("File closed successfully");
   }
-
+  /**
+   * Запазва текущите данни във файла. Ако няма отворен файл, този метод не прави нищо.
+   */
   public void save() {
     if (!isFileOpen) {
       System.out.println("No file is currently open.");
@@ -110,7 +126,10 @@ public class JsonEditor {
     }
   }
 
-
+  /**
+   * Запазва текущите данни в нов файл, указан от newFilePathString. Ако няма отворен файл, този метод не прави нищо.
+   * @param newFilePathString пътят до файла, където данните трябва да бъдат запазени
+   */
   public void saveAs(String newFilePathString) {
     if (!isFileOpen) {
       System.out.println("No file is currently open.");
@@ -124,7 +143,9 @@ public class JsonEditor {
       System.out.println("An error occurred while saving the file.");
     }
   }
-
+  /**
+   * Отпечатва помощник за менюто, изброяващо всички налични команди и техния начин на употреба.
+   */
   public void help() {
     System.out.println("Supported commands:");
     System.out.println("open <file_path> - Opens the file at <file_path>.");
@@ -153,7 +174,9 @@ public class JsonEditor {
   public void exit() {
     System.exit(0);
   }
-
+  /**
+   * Основният цикъл на програмата, чакащ за вход от потребителя и изпълняващ команди.
+   */
   public void run() {
     Scanner scanner = new Scanner(System.in);
     StudentService studentService = new StudentService(studentRepository);

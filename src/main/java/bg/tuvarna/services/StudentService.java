@@ -3,11 +3,13 @@ package bg.tuvarna.services;
 import bg.tuvarna.models.*;
 import bg.tuvarna.repositories.StudentRepository;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+/**
+ * Клас, представляващ услуги свързани със студентите.
+ */
 public class StudentService {
   private final StudentRepository studentRepository;
 
@@ -15,7 +17,14 @@ public class StudentService {
     this.studentRepository = studentRepository;
   }
 
-  // Записване на студент в първи курс
+  /**
+   * Записва студент в първи курс.
+   *
+   * @param name     име на студента
+   * @param program  програма, в която се записва студента
+   * @param group    група на студента
+   * @param fn       факултетен номер на студента
+   */
   public void enrollStudent(String name, Program program, int group, String fn) {
     Student student = new Student();
     student.setName(name);
@@ -28,12 +37,21 @@ public class StudentService {
 
     studentRepository.save(student);
   }
-
+  /**
+   * Проверява дали дадена дисциплина е успешно завършена.
+   *
+   * @param course дисциплина
+   * @return true, ако дисциплината е успешно завършена, false в противен случай
+   */
   private boolean isCourseSuccessfullyCompleted(Course course) {
     return course.isEnrolled() && course.isGraded() && course.getGrade() >= 3.0;
   }
 
-  // Записване на студент в следващ курс
+  /**
+   * Записва студент в следващ курс.
+   *
+   * @param fn факултетен номер на студента
+   */
   public void advance(String fn) {
     Student student = studentRepository.findByFacultyNumber(fn);
     if (student == null) {
@@ -60,7 +78,13 @@ public class StudentService {
     student.setCurrentYear(student.getCurrentYear() + 1);
     System.out.println("The student has been advanced to the next year.");
   }
-
+  /**
+   * Променя стойността на определена характеристика на студент.
+   *
+   * @param fn     факултетен номер на студента
+   * @param option опция за промяна
+   * @param value  нова стойност
+   */
   public void change(String fn, String option, String value) {
     Student student = studentRepository.findByFacultyNumber(fn);
     if (student == null) {
@@ -123,7 +147,11 @@ public class StudentService {
         break;
     }
   }
-
+  /**
+   * Променя статуса на студента на завършил.
+   *
+   * @param fn факултетен номер на студента
+   */
   public void graduate(String fn) {
     Student student = studentRepository.findByFacultyNumber(fn);
     if (student == null) {
@@ -144,7 +172,11 @@ public class StudentService {
     student.setStatus(Status.GRADUATED);
     System.out.println("The student has graduated.");
   }
-
+  /**
+   * Прекъсва студентските права на студент.
+   *
+   * @param fn факултетен номер на студента
+   */
   public void interrupt(String fn) {
     Student student = studentRepository.findByFacultyNumber(fn);
     if (student == null) {
@@ -155,6 +187,12 @@ public class StudentService {
     student.setStatus(Status.DROPOUT);
     System.out.println("The student has dropped out.");
   }
+
+  /**
+   * Възстановява студентските права след прекъсване
+   *
+   * @param fn факултетен номер на студента
+   */
   public void resume(String fn){
     Student student = studentRepository.findByFacultyNumber(fn);
     if (student == null) {
@@ -169,7 +207,11 @@ public class StudentService {
       System.out.println("Student has not dropped out.");
     }
   }
-
+  /**
+   * Извежда справка за студент.
+   *
+   * @param fn факултетен номер на студента
+   */
   public void print(String fn) {
     Student student = studentRepository.findByFacultyNumber(fn);
     if (student == null) {
@@ -189,7 +231,12 @@ public class StudentService {
       System.out.println("  Grade: " + (course.isGraded() ? course.getGrade() : "Not graded yet"));
     }
   }
-// Insufficent parameters
+  /**
+   * Извежда справка за всички студенти от дадена програма и година.
+   *
+   * @param programName име на програмата
+   * @param year        година
+   */
   public void printAll(String programName, int year) {
     List<Student> students = studentRepository.findByProgramAndCurrentYear(programName, year);
     if (students.isEmpty()) {
@@ -211,7 +258,12 @@ public class StudentService {
       System.out.println("-----");
     }
   }
-// Insufficent parameters
+  /**
+   * Записва студент в даден курс.
+   *
+   * @param fn              факултетен номер на студента
+   * @param disciplineName  име на дисциплината
+   */
   public void enrollIn(String fn, String disciplineName) {
     Student student = studentRepository.findByFacultyNumber(fn);
     if (student == null) {
@@ -247,7 +299,13 @@ public class StudentService {
 
     System.out.println("The student has been enrolled in the course.");
   }
-
+  /**
+   * Добавя оценка за дадена дисциплина на студент.
+   *
+   * @param fn              факултетен номер на студента
+   * @param disciplineName  име на дисциплината
+   * @param grade           оценка
+   */
   public void addGrade(String fn, String disciplineName, double grade) {
     // Намиране на студента по факултетен номер
     Student student = studentRepository.findByFacultyNumber(fn);
@@ -286,7 +344,11 @@ public class StudentService {
 
     System.out.println("The grade has been added.");
   }
-
+  /**
+   * Извежда протокол за дадена дисциплина.
+   *
+   * @param disciplineName име на дисциплината
+   */
   public void protocol(String disciplineName) {
     // Опит за намиране на дисциплината по име
     Discipline discipline;
@@ -326,7 +388,11 @@ public class StudentService {
       });
     });
   }
-
+  /**
+   * Извежда отчет за студент.
+   *
+   * @param fn факултетен номер на студента
+   */
   public void report(String fn) {
     Student student = studentRepository.findByFacultyNumber(fn);
     if (student == null) {

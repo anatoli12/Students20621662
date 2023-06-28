@@ -1,5 +1,8 @@
 package bg.tuvarna.models;
-
+/**
+ * Изброимият тип Discipline представя различните дисциплини в университета.
+ * Всяка дисциплина се характеризира с име, индикатор дали е задължителна и година на обучение.
+ */
 public enum Discipline {
     PF("Programming fundamentals", true, 1),
     WD("Web Development", true, 1),
