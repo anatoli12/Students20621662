@@ -14,21 +14,21 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 /**
- * JsonEditor класът отговаря за работата с файлове, по-конкретно json, включващи информация за студенти.
- * Поддържа операции като отваряне, затваряне, запазване на файлове. Използва CLI за обработката на данните за студентите.
+ * JsonEditor класът отговаря за работата с файлове, по-конкретно json, включващи информация за
+ * студенти. Поддържа операции като отваряне, затваряне, запазване на файлове. Използва CLI за
+ * обработката на данните за студентите.
  */
 public class JsonEditor {
 
+  /** Текущият път до файл. */
   private Path currentFilePath;
+  /** Текущите данни. */
   private ObjectNode currentData;
+
   private boolean isFileOpen;
-  /**
-   * Обектът от тип ObjectMapper отговаря за трансформацията между Java обект и JSON.
-   */
+  /** Обектът от тип ObjectMapper отговаря за трансформацията между Java обект и JSON. */
   private ObjectMapper objectMapper;
-  /**
-   * Данните за студентите
-   */
+  /** Данните за студентите */
   private StudentRepository studentRepository;
 
   public JsonEditor() {
@@ -38,6 +38,7 @@ public class JsonEditor {
   }
   /**
    * Отваря файл по зададен път, чете JSON данните и ги запазва в Student хранилището.
+   *
    * @param filePathString пътят към файла за отваряне.
    */
   public void openFile(String filePathString) {
@@ -81,9 +82,7 @@ public class JsonEditor {
       e.printStackTrace();
     }
   }
-  /**
-   * Затваря текущо отворения файл, ако има такъв.
-   */
+  /** Затваря текущо отворения файл, ако има такъв. */
   public void closeFile() {
     if (!isFileOpen) {
       System.out.println("No file is currently open.");
@@ -97,9 +96,7 @@ public class JsonEditor {
     studentRepository = new StudentRepository();
     System.out.println("File closed successfully");
   }
-  /**
-   * Запазва текущите данни във файла. Ако няма отворен файл, този метод не прави нищо.
-   */
+  /** Запазва текущите данни във файла. Ако няма отворен файл, този метод не прави нищо. */
   public void save() {
     if (!isFileOpen) {
       System.out.println("No file is currently open.");
@@ -127,7 +124,9 @@ public class JsonEditor {
   }
 
   /**
-   * Запазва текущите данни в нов файл, указан от newFilePathString. Ако няма отворен файл, този метод не прави нищо.
+   * Запазва текущите данни в нов файл, указан от newFilePathString. Ако няма отворен файл, този
+   * метод не прави нищо.
+   *
    * @param newFilePathString пътят до файла, където данните трябва да бъдат запазени
    */
   public void saveAs(String newFilePathString) {
@@ -143,9 +142,7 @@ public class JsonEditor {
       System.out.println("An error occurred while saving the file.");
     }
   }
-  /**
-   * Отпечатва помощник за менюто, изброяващо всички налични команди и техния начин на употреба.
-   */
+  /** Отпечатва помощник за менюто, изброяващо всички налични команди и техния начин на употреба. */
   public void help() {
     System.out.println("Supported commands:");
     System.out.println("open <file_path> - Opens the file at <file_path>.");
@@ -174,9 +171,7 @@ public class JsonEditor {
   public void exit() {
     System.exit(0);
   }
-  /**
-   * Основният цикъл на програмата, чакащ за вход от потребителя и изпълняващ команди.
-   */
+  /** Основният цикъл на програмата, чакащ за вход от потребителя и изпълняващ команди. */
   public void run() {
     Scanner scanner = new Scanner(System.in);
     StudentService studentService = new StudentService(studentRepository);
@@ -190,33 +185,25 @@ public class JsonEditor {
         String[] cmdArgs = parts.length > 1 ? parts[1].split(" ") : new String[0];
 
         switch (cmd) {
-          case "open":
-            if (cmdArgs.length<1) {
+          case "open" -> {
+            if (cmdArgs.length < 1) {
               System.out.println("File path is required.");
             } else {
               openFile(cmdArgs[0]);
             }
-            break;
-          case "close":
-            closeFile();
-            break;
-          case "save":
-            save();
-            break;
-          case "saveas":
-            if (cmdArgs.length<1) {
+          }
+          case "close" -> closeFile();
+          case "save" -> save();
+          case "saveas" -> {
+            if (cmdArgs.length < 1) {
               System.out.println("New file path is required.");
             } else {
               saveAs(cmdArgs[0]);
             }
-            break;
-          case "help":
-            help();
-            break;
-          case "exit":
-            exit();
-            break;
-          case "enroll":
+          }
+          case "help" -> help();
+          case "exit" -> exit();
+          case "enroll" -> {
             if (isFileOpen) {
               if (cmdArgs.length < 4) {
                 System.out.println(
@@ -232,8 +219,8 @@ public class JsonEditor {
             } else {
               System.out.println("No file is currently open.");
             }
-            break;
-          case "advance":
+          }
+          case "advance" -> {
             if (isFileOpen) {
               if (parts.length < 2) {
                 System.out.println("Faculty number is required.");
@@ -244,16 +231,16 @@ public class JsonEditor {
             } else {
               System.out.println("No file is currently open.");
             }
-            break;
-          case "change":
+          }
+          case "change" -> {
             if (isFileOpen) {
-              if (cmdArgs.length<1) {
+              if (cmdArgs.length < 1) {
                 System.out.println(
-                        "Insufficient parameters. Usage: change <facultyNumber> <option> <value>");
+                    "Insufficient parameters. Usage: change <facultyNumber> <option> <value>");
               } else {
                 if (cmdArgs.length < 3) {
                   System.out.println(
-                          "Insufficient parameters. Usage: change <facultyNumber> <option> <value>");
+                      "Insufficient parameters. Usage: change <facultyNumber> <option> <value>");
                 } else {
                   String facultyNumber = cmdArgs[0];
                   String option = cmdArgs[1];
@@ -264,8 +251,8 @@ public class JsonEditor {
             } else {
               System.out.println("No file is currently open.");
             }
-            break;
-          case "graduate":
+          }
+          case "graduate" -> {
             if (isFileOpen) {
               if (parts.length < 2) {
                 System.out.println("Faculty number is required.");
@@ -276,8 +263,8 @@ public class JsonEditor {
             } else {
               System.out.println("No file is currently open.");
             }
-            break;
-          case "interrupt":
+          }
+          case "interrupt" -> {
             if (isFileOpen) {
               if (parts.length < 2) {
                 System.out.println("Faculty number is required.");
@@ -288,8 +275,8 @@ public class JsonEditor {
             } else {
               System.out.println("No file is currently open.");
             }
-            break;
-          case "resume":
+          }
+          case "resume" -> {
             if (isFileOpen) {
               if (parts.length < 2) {
                 System.out.println("Faculty number is required.");
@@ -300,8 +287,8 @@ public class JsonEditor {
             } else {
               System.out.println("No file is currently open.");
             }
-            break;
-          case "print":
+          }
+          case "print" -> {
             if (isFileOpen) {
               if (parts.length < 2) {
                 System.out.println("Faculty number is required.");
@@ -312,8 +299,8 @@ public class JsonEditor {
             } else {
               System.out.println("No file is currently open.");
             }
-            break;
-          case "printall":
+          }
+          case "printall" -> {
             if (isFileOpen) {
               if (parts.length < 2) {
                 System.out.println("Insufficient parameters. Usage: printall <program> <year>");
@@ -325,8 +312,8 @@ public class JsonEditor {
             } else {
               System.out.println("No file is currently open.");
             }
-            break;
-          case "enrollin":
+          }
+          case "enrollin" -> {
             if (isFileOpen) {
               if (parts.length < 2) {
                 System.out.println(
@@ -339,8 +326,8 @@ public class JsonEditor {
             } else {
               System.out.println("No file is currently open.");
             }
-            break;
-          case "addgrade":
+          }
+          case "addgrade" -> {
             if (isFileOpen) {
               if (cmdArgs.length < 3) {
                 System.out.println(
@@ -354,8 +341,8 @@ public class JsonEditor {
             } else {
               System.out.println("No file is currently open.");
             }
-            break;
-          case "protocol":
+          }
+          case "protocol" -> {
             if (isFileOpen) {
               if (parts.length < 2) {
                 System.out.println("Discipline name is required.");
@@ -366,8 +353,8 @@ public class JsonEditor {
             } else {
               System.out.println("No file is currently open.");
             }
-            break;
-          case "report":
+          }
+          case "report" -> {
             if (isFileOpen) {
               if (parts.length < 2) {
                 System.out.println("Faculty number is required.");
@@ -378,10 +365,8 @@ public class JsonEditor {
             } else {
               System.out.println("No file is currently open.");
             }
-            break;
-          default:
-            System.out.println("Unknown command.");
-            break;
+          }
+          default -> System.out.println("Unknown command.");
         }
       }
     }
