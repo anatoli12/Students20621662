@@ -1,7 +1,8 @@
 package bg.tuvarna.models;
 
-import java.util.List;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * Класът Student представя модела на студент в университет. Съдържа информация за името на

@@ -1,10 +1,10 @@
 package bg.tuvarna;
 
-import bg.tuvarna.access.JsonEditor;
+import bg.tuvarna.cli.CommandLineRunner;
 
 public class Main {
     public static void main(String[] args){
-        JsonEditor jsonEditor = new JsonEditor();
-        jsonEditor.run();
+        CommandLineRunner commandLineRunner = new CommandLineRunner();
+        commandLineRunner.run();
     }
 }

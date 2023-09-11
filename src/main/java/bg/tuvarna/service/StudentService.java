@@ -1,7 +1,8 @@
-package bg.tuvarna.services;
+package bg.tuvarna.service;
 
 import bg.tuvarna.models.*;
 import bg.tuvarna.repositories.StudentRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

@@ -1,13 +1,14 @@
-package bg.tuvarna.access;
+package bg.tuvarna.cli;
 
 import bg.tuvarna.models.Program;
 import bg.tuvarna.models.Student;
 import bg.tuvarna.repositories.StudentRepository;
-import bg.tuvarna.services.StudentService;
+import bg.tuvarna.service.StudentService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -18,7 +19,7 @@ import java.util.Scanner;
  * студенти. Поддържа операции като отваряне, затваряне, запазване на файлове. Използва CLI за
  * обработката на данните за студентите.
  */
-public class JsonEditor {
+public class CommandLineRunner {
 
   /** Текущият път до файл. */
   private Path currentFilePath;
@@ -31,7 +32,7 @@ public class JsonEditor {
   /** Данните за студентите */
   private StudentRepository studentRepository;
 
-  public JsonEditor() {
+  public CommandLineRunner() {
     objectMapper = new ObjectMapper();
     isFileOpen = false;
     studentRepository = new StudentRepository();
